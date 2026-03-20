@@ -1,8 +1,16 @@
-# Classes
-classes/*
+# Build directories in any sub-folder
+target/
 
-# Binary builds
-ActivityMgr_*
+# Workspace at root
+/workspace/
 
-# Build directory
-.dist/*
+# Mac specific
+.DS_Store
+._*
+
+# Eclipse 
+bin/
+
+# Local maven repository 
+.repo/
+.repository/

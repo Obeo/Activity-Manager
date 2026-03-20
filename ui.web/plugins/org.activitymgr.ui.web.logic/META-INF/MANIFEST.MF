@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Activity Manager Web UI Logic
+Bundle-SymbolicName: org.activitymgr.ui.web.logic;singleton:=true
+Bundle-Version: 1.4.0.qualifier
+Bundle-Vendor: Jean-Francois Brazeau
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Require-Bundle: org.eclipse.osgi,
+ org.activitymgr.core.model,
+ org.eclipse.equinox.registry,
+ org.apache.commons.dbcp;bundle-version="1.4.0",
+ org.activitymgr.core.util;bundle-version="1.0.0",
+ com.google.guava,
+ org.apache.commons.beanutils;bundle-version="1.8.0",
+ org.apache.commons.lang,
+ org.apache.poi,
+ org.apache.commons.codec,
+ com.google.gson;bundle-version="2.2.4"
+Export-Package: org.activitymgr.ui.web.logic,
+ org.activitymgr.ui.web.logic.impl,
+ org.activitymgr.ui.web.logic.impl.event,
+ org.activitymgr.ui.web.logic.spi
+Bundle-ActivationPolicy: lazy
+Bundle-Activator: org.activitymgr.ui.web.logic.impl.internal.Activator
+Bundle-ClassPath: .
+Automatic-Module-Name: org.activitymgr.ui.web.logic

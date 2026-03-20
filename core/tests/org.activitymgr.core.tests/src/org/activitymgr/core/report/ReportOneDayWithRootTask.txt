@@ -1,0 +1,167 @@
+# Global parameters
+start=16012017
+intervalType=day
+intervalCount=1
+rootTaskCodePath=/PR
+contributorLogins=
+
+#
+# One day, by collaborator & task, sorted by task, full depth, root task = /PR
+#
+taskDepth=10
+onlyKeepTasksWithContributions=false
+byContributor=true
+orderByContributor=false
++---------------+---------------+----------+-------+-------+-------+-------+
+|Path           |Name           |Contribut.| Budget|Ini. C.| 160117|    ETC|
++---------------+---------------+----------+-------+-------+-------+-------+
+|/PA/SPE        |Specification  |jdoe      |   1.00|   2.00|   0.25|   3.00|
+|/PA/SPE        |Specification  |wsmith    |   -.--|   -.--|   0.25|   -.--|
+|/PA/DEV/MA     |Module A       |jdoe      |   1.00|   0.00|   0.50|   4.00|
+|/PA/DEV/MB     |Module B       |          |   4.00|   3.00|   0.00|   0.00|
+|/PA/TST        |Test           |jdoe      |   0.00|   0.00|   0.25|   0.00|
+|/PB/SPE        |Specification  |wsmith    |   0.00|   0.00|   0.50|   0.00|
+|/PB/DEV/MC     |Module C       |          |   8.00|   0.00|   0.00|   4.00|
+|/PB/DEV/MD     |Module D       |          |   0.00|   1.00|   0.00|   0.00|
+|/PB/TST        |Test           |          |   6.00|   0.00|   0.00|   0.00|
++---------------+---------------+----------+-------+-------+-------+-------+
+|               |               |          |  20.00|   6.00|   1.75|  11.00|
++---------------+---------------+----------+-------+-------+-------+-------+
+
+#
+# One day, by collaborator & task, sorted by task, full depth, root task = /PR, onlyKeepTasksWithContributions=true
+#
+taskDepth=10
+onlyKeepTasksWithContributions=true
+byContributor=true
+orderByContributor=false
++---------------+---------------+----------+-------+-------+-------+-------+
+|Path           |Name           |Contribut.| Budget|Ini. C.| 160117|    ETC|
++---------------+---------------+----------+-------+-------+-------+-------+
+|/PA/SPE        |Specification  |jdoe      |   1.00|   2.00|   0.25|   3.00|
+|/PA/SPE        |Specification  |wsmith    |   -.--|   -.--|   0.25|   -.--|
+|/PA/DEV/MA     |Module A       |jdoe      |   1.00|   0.00|   0.50|   4.00|
+|/PA/TST        |Test           |jdoe      |   0.00|   0.00|   0.25|   0.00|
+|/PB/SPE        |Specification  |wsmith    |   0.00|   0.00|   0.50|   0.00|
++---------------+---------------+----------+-------+-------+-------+-------+
+|               |               |          |   2.00|   2.00|   1.75|   7.00|
++---------------+---------------+----------+-------+-------+-------+-------+
+
+#
+# One day, by collaborator & task, sorted by contributor, full depth, root task = /PR
+#
+taskDepth=10
+onlyKeepTasksWithContributions=false
+byContributor=true
+orderByContributor=true
++----------+---------------+---------------+-------+
+|Contribut.|Path           |Name           | 160117|
++----------+---------------+---------------+-------+
+|jdoe      |/PA/SPE        |Specification  |   0.25|
+|jdoe      |/PA/DEV/MA     |Module A       |   0.50|
+|jdoe      |/PA/TST        |Test           |   0.25|
+|wsmith    |/PA/SPE        |Specification  |   0.25|
+|wsmith    |/PB/SPE        |Specification  |   0.50|
++----------+---------------+---------------+-------+
+|          |               |               |   1.75|
++----------+---------------+---------------+-------+
+
+#
+# One day, by collaborator & task, sorted by task, depth=1, root task = /PR
+#
+taskDepth=1
+onlyKeepTasksWithContributions=false
+byContributor=true
+orderByContributor=false
++---------------+---------------+----------+-------+-------+-------+-------+
+|Path           |Name           |Contribut.| Budget|Ini. C.| 160117|    ETC|
++---------------+---------------+----------+-------+-------+-------+-------+
+|/PA            |Project A      |jdoe      |   6.00|   5.00|   1.00|   7.00|
+|/PA            |Project A      |wsmith    |   -.--|   -.--|   0.25|   -.--|
+|/PB            |Project B      |wsmith    |  14.00|   1.00|   0.50|   4.00|
++---------------+---------------+----------+-------+-------+-------+-------+
+|               |               |          |  20.00|   6.00|   1.75|  11.00|
++---------------+---------------+----------+-------+-------+-------+-------+
+
+#
+# One day, by collaborator & task, sorted by contributor, depth=1, root task = /PR
+#
+taskDepth=1
+byContributor=true
+orderByContributor=true
++----------+---------------+---------------+-------+
+|Contribut.|Path           |Name           | 160117|
++----------+---------------+---------------+-------+
+|jdoe      |/PA            |Project A      |   1.00|
+|wsmith    |/PA            |Project A      |   0.25|
+|wsmith    |/PB            |Project B      |   0.50|
++----------+---------------+---------------+-------+
+|          |               |               |   1.75|
++----------+---------------+---------------+-------+
+
+#
+# One day, by task but not by collaborator, full depth, root task = /PR
+#
+taskDepth=10
+byContributor=false
+orderByContributor=false
++---------------+---------------+-------+-------+-------+-------+
+|Path           |Name           | Budget|Ini. C.| 160117|    ETC|
++---------------+---------------+-------+-------+-------+-------+
+|/PA/SPE        |Specification  |   1.00|   2.00|   0.50|   3.00|
+|/PA/DEV/MA     |Module A       |   1.00|   0.00|   0.50|   4.00|
+|/PA/DEV/MB     |Module B       |   4.00|   3.00|   0.00|   0.00|
+|/PA/TST        |Test           |   0.00|   0.00|   0.25|   0.00|
+|/PB/SPE        |Specification  |   0.00|   0.00|   0.50|   0.00|
+|/PB/DEV/MC     |Module C       |   8.00|   0.00|   0.00|   4.00|
+|/PB/DEV/MD     |Module D       |   0.00|   1.00|   0.00|   0.00|
+|/PB/TST        |Test           |   6.00|   0.00|   0.00|   0.00|
++---------------+---------------+-------+-------+-------+-------+
+|               |               |  20.00|   6.00|   1.75|  11.00|
++---------------+---------------+-------+-------+-------+-------+
+
+#
+# One day, by task but not by collaborator, depth=1, root task = /PR
+#
+taskDepth=1
+byContributor=false
+orderByContributor=false
++---------------+---------------+-------+-------+-------+-------+
+|Path           |Name           | Budget|Ini. C.| 160117|    ETC|
++---------------+---------------+-------+-------+-------+-------+
+|/PA            |Project A      |   6.00|   5.00|   1.25|   7.00|
+|/PB            |Project B      |  14.00|   1.00|   0.50|   4.00|
++---------------+---------------+-------+-------+-------+-------+
+|               |               |  20.00|   6.00|   1.75|  11.00|
++---------------+---------------+-------+-------+-------+-------+
+
+#
+# One day, by collaborator but not by task (=> depth = 0), root task = /PR
+#
+taskDepth=0
+byContributor=true
+orderByContributor=false
++----------+-------+
+|Contribut.| 160117|
++----------+-------+
+|jdoe      |   1.00|
+|wsmith    |   0.75|
++----------+-------+
+|          |   1.75|
++----------+-------+
+
+#
+# One day, not by collaborator nor by task (=> depth=0), root task = /PR
+#
+taskDepth=0
+byContributor=false
+orderByContributor=false
++-------+
+| 160117|
++-------+
+|   1.75|
++-------+
+|   1.75|
++-------+
+
+

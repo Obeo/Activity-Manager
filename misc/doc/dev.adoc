@@ -1,0 +1,105 @@
+== Developer guide
+
+
+
+=== Setting the database
+
+==== Install Mysql +
+Get community server (5.7.36 version): +
+https://dev.mysql.com/downloads/mysql/5.7.html +
+
+More info on: +
+https://dev.mysql.com/doc/refman/5.7/en/ +
+
+==== Configure local data +
+
+Copy and update '_my_config.ini_' file in mysql using the sibling file. +
+In *Administrator* CMD, run:
+
+[source,bash]
+----
+bin\mysqld --defaults-file=my-config.ini --initialize-insecure
+----
+This command creates a server with 'root' account and no password (~= insecure). +
+
+==== Starting DB
+
+To start the mysql database if not installed as a service. (or copy and use "start-server.bat" in installation)
+
+[source,bash]
+----
+bin\mysqld --defaults-file=my-config.ini --console
+---- 
+
+To start client: 
+[source,bash]
+----
+bin\mysql -u root --skip-password
+----
+
+
+[NOTE]
+====
+You can change root password with:
+[source,sql]
+----
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'new-root-password';
+---- 
+But it is useless for developer.
+====
+
+==== Create schema
+
+Use in mysql client: _/misc/sql/createDatabase.sql_
+[source,bash]
+----
+bin\mysql -u root --skip-password < %git_home%\Activity-Manager\misc\sql\createDatabase.sql
+---- 
+
+Create a connection in 'Data Source Explorer' from +
+_/org.activitymgr.ui.web.feature/cfg-db.properties_
+
+
+==== Stopping DB
+
+The proper way to stop is to call this command.
+
+[source,bash]
+----
+bin\mysqladmin -u root shutdown
+----
+
+Using console "Close" may break a transaction.
+
+=== Configure Db client with Eclipse
+
+.Get Eclipse instance from Oomph
+
+Use _/misc/oomph/org.eclipse.setup_ to get all plugins.
+
+Path without git-clone:
+https://raw.githubusercontent.com/mypsycho/Activity-Manager/1.0.x/misc/oomph/org.eclipse.setup
+
+.Import a connection
+
+In 'Data Source Explorer' view ('Database development' perspective), import _/misc/doc/eclipse_connection.xml_.
+
+.Declare MySQL driver
+
+Importing a connection also declare the driver but JAR file is absolute.
+
+Driver is placed at _/misc/sql/mysql-connector-java-8.0.27.jar_, mirror of:
+https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-8.0.27.zip
+
+In _Windows/Preference#Data manager/Connectivity/Driver definition_:+
+Correct 'MySQL JDBC Driver' with provided JAR if needed.
+
+
+=== Initialize database structure
+
+[source,bash]
+----
+bin\mysql --user=taskmgr --password=taskmgr taskmgr_db < %git_home%\Activity-Manager\misc\sql\createTables.sql
+----
+
+or use eclipse connection with _misc/sql/createTables.sql_.

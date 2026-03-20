@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2004-2017, Jean-Francois Brazeau. All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without 
+  modification, are permitted provided that the following conditions are met:
+ 
+   1. Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+  
+   2. Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+  
+   3. The name of the author may not be used to endorse or promote products
+      derived from this software without specific prior written permission.
+ 
+  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+  IMPLIEDWARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+  Contributors:
+     Jean-Francois Brazeau - initial API and implementation
+     Obeo - refactoring
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.activitymgr</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.4.0-SNAPSHOT</version>
+		<relativePath>../../../parent</relativePath>
+	</parent>
+
+	<artifactId>org.activitymgr.ui.rcp.repository</artifactId>
+	<packaging>eclipse-repository</packaging>
+	
+	<properties>
+		<archiveFileName>activitymgr-rcp</archiveFileName>
+		<tpd.path>parent/tpd</tpd.path>
+		
+		<!-- 
+Repository default path for archive is defined by in:
+https://github.com/eclipse/tycho/blob/tycho-2.3.0/tycho-p2/tycho-p2-repository-plugin/src/main/java/org/eclipse/tycho/plugins/p2/repository/AbstractRepositoryMojo.java
+-->
+  		<repo.outputDirectory>${project.build.directory}/repository</repo.outputDirectory>
+		
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-repository-plugin</artifactId>
+				<configuration>
+					<includeAllDependencies>false</includeAllDependencies>
+					<createArtifactRepository>true</createArtifactRepository>
+					<compress>true</compress>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-director-plugin</artifactId>
+				<configuration>
+					<products>
+						<product>
+							<id>org.activitymgr.ui.rcp.product</id>
+							<!-- 
+							<archiveFileName>activitymgr-rcp-${unqualifiedVersion}.${buildQualifier}</archiveFileName>
+							 -->
+							<archiveFileName>${archiveFileName}</archiveFileName>
+							<rootFolder>activitymgr</rootFolder>
+							<rootFolders>
+								<macosx>ActivityManager</macosx>
+							</rootFolders>
+						</product>
+					</products>
+				</configuration>
+				<executions>
+					<execution>
+						<id>materialize-products</id>
+						<goals>
+							<goal>materialize-products</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>archive-products</id>
+						<goals>
+							<goal>archive-products</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+	  			<executions>
+	  				<execution>
+	  					<id>include-tpd</id>
+	  					<goals><goal>copy-resources</goal></goals>
+	  					<phase>prepare-package</phase>
+	  					<configuration>
+							<resources>
+								<resource>
+									<directory>../../../${tpd.path}</directory>
+									<includes>
+										<include>**/*.tpd</include>
+									</includes>
+								</resource>
+							</resources>
+	  						<outputDirectory>${repo.outputDirectory}/tpd</outputDirectory>
+	  					</configuration>
+	  				</execution>
+	  			</executions>
+			</plugin>
+			
+			<!-- fails: tycho-p2-repository-plugin::archive-repository must happen after this.
+			<plugin>
+				<artifactId>maven-resources-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>products-on-site</id>
+			            <phase>package</phase>
+			            <goals>
+			              <goal>copy-resources</goal>
+			            </goals>
+					</execution>
+				</executions>
+				<configuration>
+	              <outputDirectory>${basedir}/target/products</outputDirectory>
+	              <resources>          
+	                <resource>
+	                  <directory>${basedir}/target/repository</directory>
+	                  <includes>
+          				<include>${archiveFileName}*.zip</include>
+          				<include>${archiveFileName}*.tar.gz</include>
+        			  </includes>
+	                </resource>
+	              </resources>
+				</configuration>
+			</plugin>
+			 -->
+			
+		</plugins>
+	</build>
+
+</project>

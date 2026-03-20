@@ -1,0 +1,143 @@
+# Global parameters
+start=16012017
+intervalType=week
+intervalCount=2
+rootTaskCodePath=
+onlyKeepTasksWithContributions=false
+byContributor=true
+
+# One collaborators, task centric mode
+taskDepth=10
+orderByContributor=false
+contributorLogins=jdoe
++---------------+---------------+----------+-------+-------+-------+-------+-------+
+|Path           |Name           |Contribut.| Budget|Ini. C.|  S3-17|  S4-17|    ETC|
++---------------+---------------+----------+-------+-------+-------+-------+-------+
+|/PR/PA/SPE     |Specification  |jdoe      |   1.00|   2.00|   0.25|   0.25|   3.00|
+|/PR/PA/DEV/MA  |Module A       |jdoe      |   1.00|   0.00|   1.75|   1.75|   4.00|
+|/PR/PA/DEV/MB  |Module B       |jdoe      |   4.00|   3.00|   1.00|   1.00|   0.00|
+|/PR/PA/TST     |Test           |jdoe      |   0.00|   0.00|   1.00|   1.00|   0.00|
+|/PR/PB/SPE     |Specification  |          |   0.00|   0.00|   0.00|   0.00|   0.00|
+|/PR/PB/DEV/MC  |Module C       |          |   8.00|   0.00|   0.00|   0.00|   4.00|
+|/PR/PB/DEV/MD  |Module D       |          |   0.00|   1.00|   0.00|   0.00|   0.00|
+|/PR/PB/TST     |Test           |          |   6.00|   0.00|   0.00|   0.00|   0.00|
+|/ABS/VAC       |Vacations      |jdoe      |   0.00|   0.00|   1.00|   1.00|   0.00|
+|/ABS/ILL       |Illness        |          |   0.00|   0.00|   0.00|   0.00|   0.00|
++---------------+---------------+----------+-------+-------+-------+-------+-------+
+|               |               |          |  20.00|   6.00|   5.00|   5.00|  11.00|
++---------------+---------------+----------+-------+-------+-------+-------+-------+
+
+# Two collaborators, task centric mode
+taskDepth=10
+orderByContributor=false
+contributorLogins=jdoe,wsmith
++---------------+---------------+----------+-------+-------+-------+-------+-------+
+|Path           |Name           |Contribut.| Budget|Ini. C.|  S3-17|  S4-17|    ETC|
++---------------+---------------+----------+-------+-------+-------+-------+-------+
+|/PR/PA/SPE     |Specification  |jdoe      |   1.00|   2.00|   0.25|   0.25|   3.00|
+|/PR/PA/SPE     |Specification  |wsmith    |   -.--|   -.--|   0.25|   0.25|   -.--|
+|/PR/PA/DEV/MA  |Module A       |jdoe      |   1.00|   0.00|   1.75|   1.75|   4.00|
+|/PR/PA/DEV/MB  |Module B       |jdoe      |   4.00|   3.00|   1.00|   1.00|   0.00|
+|/PR/PA/TST     |Test           |jdoe      |   0.00|   0.00|   1.00|   1.00|   0.00|
+|/PR/PB/SPE     |Specification  |wsmith    |   0.00|   0.00|   0.75|   0.75|   0.00|
+|/PR/PB/DEV/MC  |Module C       |wsmith    |   8.00|   0.00|   1.50|   1.50|   4.00|
+|/PR/PB/DEV/MD  |Module D       |          |   0.00|   1.00|   0.00|   0.00|   0.00|
+|/PR/PB/TST     |Test           |wsmith    |   6.00|   0.00|   2.25|   2.25|   0.00|
+|/ABS/VAC       |Vacations      |jdoe      |   0.00|   0.00|   1.00|   1.00|   0.00|
+|/ABS/ILL       |Illness        |wsmith    |   0.00|   0.00|   0.25|   0.25|   0.00|
++---------------+---------------+----------+-------+-------+-------+-------+-------+
+|               |               |          |  20.00|   6.00|  10.00|  10.00|  11.00|
++---------------+---------------+----------+-------+-------+-------+-------+-------+
+
+# One collaborators, task centric mode
+taskDepth=10
+orderByContributor=true
+contributorLogins=jdoe
++----------+---------------+---------------+-------+-------+
+|Contribut.|Path           |Name           |  S3-17|  S4-17|
++----------+---------------+---------------+-------+-------+
+|jdoe      |/PR/PA/SPE     |Specification  |   0.25|   0.25|
+|jdoe      |/PR/PA/DEV/MA  |Module A       |   1.75|   1.75|
+|jdoe      |/PR/PA/DEV/MB  |Module B       |   1.00|   1.00|
+|jdoe      |/PR/PA/TST     |Test           |   1.00|   1.00|
+|jdoe      |/ABS/VAC       |Vacations      |   1.00|   1.00|
++----------+---------------+---------------+-------+-------+
+|          |               |               |   5.00|   5.00|
++----------+---------------+---------------+-------+-------+
+
+# One collaborators, task centric mode
+taskDepth=10
+orderByContributor=true
+contributorLogins=jdoe,wsmith
++----------+---------------+---------------+-------+-------+
+|Contribut.|Path           |Name           |  S3-17|  S4-17|
++----------+---------------+---------------+-------+-------+
+|jdoe      |/PR/PA/SPE     |Specification  |   0.25|   0.25|
+|jdoe      |/PR/PA/DEV/MA  |Module A       |   1.75|   1.75|
+|jdoe      |/PR/PA/DEV/MB  |Module B       |   1.00|   1.00|
+|jdoe      |/PR/PA/TST     |Test           |   1.00|   1.00|
+|jdoe      |/ABS/VAC       |Vacations      |   1.00|   1.00|
+|wsmith    |/PR/PA/SPE     |Specification  |   0.25|   0.25|
+|wsmith    |/PR/PB/SPE     |Specification  |   0.75|   0.75|
+|wsmith    |/PR/PB/DEV/MC  |Module C       |   1.50|   1.50|
+|wsmith    |/PR/PB/TST     |Test           |   2.25|   2.25|
+|wsmith    |/ABS/ILL       |Illness        |   0.25|   0.25|
++----------+---------------+---------------+-------+-------+
+|          |               |               |  10.00|  10.00|
++----------+---------------+---------------+-------+-------+
+
+# One collaborators, task centric mode
+taskDepth=1
+orderByContributor=false
+contributorLogins=jdoe
++---------------+---------------+----------+-------+-------+-------+-------+-------+
+|Path           |Name           |Contribut.| Budget|Ini. C.|  S3-17|  S4-17|    ETC|
++---------------+---------------+----------+-------+-------+-------+-------+-------+
+|/PR            |Projects       |jdoe      |  20.00|   6.00|   4.00|   4.00|  11.00|
+|/ABS           |Absence        |jdoe      |   0.00|   0.00|   1.00|   1.00|   0.00|
++---------------+---------------+----------+-------+-------+-------+-------+-------+
+|               |               |          |  20.00|   6.00|   5.00|   5.00|  11.00|
++---------------+---------------+----------+-------+-------+-------+-------+-------+
+
+# Two collaborators, task centric mode
+taskDepth=1
+orderByContributor=false
+contributorLogins=jdoe,wsmith
++---------------+---------------+----------+-------+-------+-------+-------+-------+
+|Path           |Name           |Contribut.| Budget|Ini. C.|  S3-17|  S4-17|    ETC|
++---------------+---------------+----------+-------+-------+-------+-------+-------+
+|/PR            |Projects       |jdoe      |  20.00|   6.00|   4.00|   4.00|  11.00|
+|/PR            |Projects       |wsmith    |   -.--|   -.--|   4.75|   4.75|   -.--|
+|/ABS           |Absence        |jdoe      |   0.00|   0.00|   1.00|   1.00|   0.00|
+|/ABS           |Absence        |wsmith    |   -.--|   -.--|   0.25|   0.25|   -.--|
++---------------+---------------+----------+-------+-------+-------+-------+-------+
+|               |               |          |  20.00|   6.00|  10.00|  10.00|  11.00|
++---------------+---------------+----------+-------+-------+-------+-------+-------+
+
+# One collaborators, task centric mode
+taskDepth=1
+orderByContributor=true
+contributorLogins=jdoe
++----------+---------------+---------------+-------+-------+
+|Contribut.|Path           |Name           |  S3-17|  S4-17|
++----------+---------------+---------------+-------+-------+
+|jdoe      |/PR            |Projects       |   4.00|   4.00|
+|jdoe      |/ABS           |Absence        |   1.00|   1.00|
++----------+---------------+---------------+-------+-------+
+|          |               |               |   5.00|   5.00|
++----------+---------------+---------------+-------+-------+
+
+# One collaborators, task centric mode
+taskDepth=1
+orderByContributor=true
+contributorLogins=jdoe,wsmith
++----------+---------------+---------------+-------+-------+
+|Contribut.|Path           |Name           |  S3-17|  S4-17|
++----------+---------------+---------------+-------+-------+
+|jdoe      |/PR            |Projects       |   4.00|   4.00|
+|jdoe      |/ABS           |Absence        |   1.00|   1.00|
+|wsmith    |/PR            |Projects       |   4.75|   4.75|
+|wsmith    |/ABS           |Absence        |   0.25|   0.25|
++----------+---------------+---------------+-------+-------+
+|          |               |               |  10.00|  10.00|
++----------+---------------+---------------+-------+-------+

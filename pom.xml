@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Copyright (c) 2004-2017, Jean-Francois Brazeau. All rights reserved.
+  
+  Redistribution and use in source and binary forms, with or without 
+  modification, are permitted provided that the following conditions are met:
+ 
+   1. Redistributions of source code must retain the above copyright notice,
+      this list of conditions and the following disclaimer.
+  
+   2. Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+  
+   3. The name of the author may not be used to endorse or promote products
+      derived from this software without specific prior written permission.
+ 
+  THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+  IMPLIEDWARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+  OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+  IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+  INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+  BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS
+  OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+  ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
+  TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE
+  USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ 
+  Contributors:
+     Jean-Francois Brazeau - initial API and implementation
+     Obeo - refactoring
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.activitymgr</groupId>
+	<artifactId>container</artifactId>
+	<version>1.4.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>POM Container</name>
+	
+	<properties>
+		<tycho.scmUrl>scm:git:https://github.com/jfbrazeau/Activity-Manager.git</tycho.scmUrl>
+	</properties>
+
+	<modules>
+		<module>parent</module>
+		
+		<!-- Regular components -->
+		<module>core/plugins/org.activitymgr.core.dao</module>
+		<module>core/plugins/org.activitymgr.core.dao.h2fragment</module>
+		<module>core/plugins/org.activitymgr.core.dao.hsqldbfragment</module>
+		<module>core/plugins/org.activitymgr.core.dao.mysqlfragment</module>
+		<module>core/plugins/org.activitymgr.core.dto</module>
+		<module>core/plugins/org.activitymgr.core.model</module>
+		<module>core/plugins/org.activitymgr.core.orm</module>
+		<module>core/plugins/org.activitymgr.core.util</module>
+		
+		<module>ui.rcp/plugins/org.activitymgr.ui.rcp</module>
+		
+		<module>ui.web/plugins/org.activitymgr.ui.web.logic</module>
+		<module>ui.web/plugins/org.activitymgr.ui.web.view</module>
+	</modules>
+
+	<profiles>
+	
+		<profile>
+		    <!-- 
+			By default, tests are executed.
+			use -Dmaven.test.skip=true to disable.
+			-->
+			<id>tests</id>
+			<activation>
+				<property>
+					<name>maven.test.skip</name>
+					<value>!true</value>
+				</property>
+			</activation>
+			<modules>
+				<module>core/tests/org.activitymgr.core.tests</module>
+			</modules>
+		</profile>
+		
+		<profile>
+		    <!-- 
+			By default, release component are built.
+			use -Dmaven.releng.skip=true to disable.
+			-->
+			<id>releng</id>
+			<activation>
+				<property>
+					<name>tycho.releng.skip</name>
+					<value>!true</value>
+				</property>
+			</activation>
+			<modules>
+				<module>core/releng/org.activitymgr.core.feature</module>
+				<module>ui.rcp/releng/org.activitymgr.ui.rcp.repository</module>
+				<module>ui.rcp/releng/org.activitymgr.ui.rcp.feature</module>
+				<module>ui.web/releng/org.activitymgr.ui.web.feature</module>
+				<module>ui.web/releng/org.activitymgr.ui.web.repository</module>
+			</modules>
+		</profile>
+
+	</profiles>
+
+
+	<build>
+	   <plugins>
+	       <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-enforcer-plugin</artifactId>
+            <version>3.0.0-M3</version>
+            <executions>
+	          	<execution>
+		            <id>show-os</id>
+		            <phase>validate</phase>
+		            <goals>
+		              <goal>display-info</goal>
+	            	</goals>
+	            </execution>
+            </executions>
+	       </plugin>
+	   </plugins>
+	
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.eclipse.tycho</groupId>
+					<artifactId>tycho-versions-plugin</artifactId>
+					<version>1.5.1</version>
+					<configuration>
+						<!-- List of ArtifactIds reachable by this pom. -->
+						<!-- Only the ones without project.parent. -->
+						<artifacts>container,parent</artifacts>
+					</configuration>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+		
+	</build>
+
+</project>
