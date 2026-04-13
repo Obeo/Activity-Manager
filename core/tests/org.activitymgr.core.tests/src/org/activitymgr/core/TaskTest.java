@@ -146,7 +146,7 @@ public class TaskTest extends AbstractModelTestCase {
 			String expectedPath = StringHelper.toHex(rootTask.getNumber()); 
 			assertEquals(expectedPath, task1.getPath());
 			assertEquals(expectedPath, task1.getPath());
-			assertEquals(expectedPath + "01", task11.getPath());
+			assertEquals(expectedPath + "0001", task11.getPath());
 			assertEquals(expectedPath, task2.getPath());
 
 			// Vérification des numéros
@@ -231,8 +231,8 @@ public class TaskTest extends AbstractModelTestCase {
 		// Création des taches de test
 		withSampleTasks(() -> {
 			// Vérification des numéros des taches
-			assertEquals((byte) 1, task1.getNumber());
-			assertEquals((byte) 2, task2.getNumber());
+			assertEquals((short) 1, task1.getNumber());
+			assertEquals((short) 2, task2.getNumber());
 
 			// Déplacement + vérification des nouveaux numéros
 			getModelMgr().moveDownTask(task1);
@@ -242,8 +242,8 @@ public class TaskTest extends AbstractModelTestCase {
 			task2 = getModelMgr().getTask(task2.getId());
 
 			// Controls
-			assertEquals((byte) 2, task1.getNumber());
-			assertEquals((byte) 1, task2.getNumber());
+			assertEquals((short) 2, task1.getNumber());
+			assertEquals((short) 1, task2.getNumber());
 			assertEquals(1, getModelMgr().getSubTasksCount(task1.getId()));
 			assertEquals(0, getModelMgr().getSubTasksCount(task2.getId()));
 		});
@@ -253,8 +253,8 @@ public class TaskTest extends AbstractModelTestCase {
 		// Création des taches de test
 		withSampleTasks(() -> {
 			// Vérification des numéros des taches
-			assertEquals((byte) 1, task1.getNumber());
-			assertEquals((byte) 2, task2.getNumber());
+			assertEquals((short) 1, task1.getNumber());
+			assertEquals((short) 2, task2.getNumber());
 
 			// Déplacement + vérification des nouveaux numéros
 			getModelMgr().moveUpTask(task2);
@@ -264,8 +264,8 @@ public class TaskTest extends AbstractModelTestCase {
 			task2 = getModelMgr().getTask(task2.getId());
 
 			// Controls
-			assertEquals((byte) 2, task1.getNumber());
-			assertEquals((byte) 1, task2.getNumber());
+			assertEquals((short) 2, task1.getNumber());
+			assertEquals((short) 1, task2.getNumber());
 			assertEquals(1, getModelMgr().getSubTasksCount(task1.getId()));
 			assertEquals(0, getModelMgr().getSubTasksCount(task2.getId()));
 		});
@@ -276,10 +276,10 @@ public class TaskTest extends AbstractModelTestCase {
 		withSampleTasks(() -> {
 			// Vérification des numéros des taches
 			assertEquals(1, getModelMgr().getSubTasksCount(task1.getId()));
-			assertEquals(task1.getPath() + "01", task11.getPath());
-			assertEquals(task11.getPath() + "01", task111.getPath());
-			assertEquals(task11.getPath() + "01", task112.getPath());
-			assertEquals((byte) 2, task112.getNumber());
+			assertEquals(task1.getPath() + "0001", task11.getPath());
+			assertEquals(task11.getPath() + "0001", task111.getPath());
+			assertEquals(task11.getPath() + "0001", task112.getPath());
+			assertEquals((short) 2, task112.getNumber());
 
 			// Déplacement
 			getModelMgr().moveTask(task111, task1);
@@ -293,10 +293,10 @@ public class TaskTest extends AbstractModelTestCase {
 
 			// Controls
 			assertEquals(2, getModelMgr().getSubTasksCount(task1.getId()));
-			assertEquals(task1.getPath() + "01", task11.getPath());
-			assertEquals(task1.getPath() + "01", task111.getPath());
-			assertEquals(task11.getPath() + "01", task112.getPath());
-			assertEquals((byte) 1, task112.getNumber());
+			assertEquals(task1.getPath() + "0001", task11.getPath());
+			assertEquals(task1.getPath() + "0001", task111.getPath());
+			assertEquals(task11.getPath() + "0001", task112.getPath());
+			assertEquals((short) 1, task112.getNumber());
 		});
 	}
 
@@ -527,16 +527,16 @@ public class TaskTest extends AbstractModelTestCase {
 	}
 
 	public void testMoveUpOrDownTask50() throws Exception {
-		testMoveUpOrDownTask(51, 50, "/RT/PARENT/CD");
+		testMoveUpOrDownTask(51, (short) 50, "/RT/PARENT/CD");
 	}
 
 	public void testMoveUpOrDownTask150() throws Exception {
-		testMoveUpOrDownTask(151, 140, "/RT/PARENT/CD");
+		testMoveUpOrDownTask(151, (short) 140, "/RT/PARENT/CD");
 	}
 
-	protected void testMoveUpOrDownTask(int numberOfTaskToCreate, int taskToMoveNumber, String taskToMoveRootPath) throws Exception {
+	protected void testMoveUpOrDownTask(int numberOfTaskToCreate, short taskToMoveNumber, String taskToMoveRootPath) throws Exception {
 		String taskToMovePath = taskToMoveRootPath + taskToMoveNumber;
-		byte newTaskNumber = 2;
+		short newTaskNumber = 2;
 		withSampleTasks(() -> {
 			// Création d'une tâche avec <numberOfTaskToCreate> tâches filles
 			Task parentTask = getFactory().newTask();
@@ -557,7 +557,7 @@ public class TaskTest extends AbstractModelTestCase {
 			Task oneTask = getModelMgr().getTaskByCodePath(taskToMovePath);
 			assertEquals("The number of task is not the expected one.", taskToMoveNumber, oneTask.getNumber());
 			try {
-				getModelMgr().moveTaskUpOrDown(oneTask, 200);
+				getModelMgr().moveTaskUpOrDown(oneTask, (short) 200);
 				fail("Moving task to 200 is not possible!");
 			}
 			catch (ModelException e) {
@@ -586,7 +586,7 @@ public class TaskTest extends AbstractModelTestCase {
 			}
 
 			// Déplacement inverse
-			getModelMgr().moveTaskUpOrDown(oneTaskClone, (byte) taskToMoveNumber);
+			getModelMgr().moveTaskUpOrDown(oneTaskClone, taskToMoveNumber);
 			// Vérification des numéros des taches
 			for (int i=1; i<=numberOfTaskToCreate; i++) {
 				int currentTaskNumber = getModelMgr().getTaskByCodePath(taskToMoveRootPath + i).getNumber();

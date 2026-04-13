@@ -431,7 +431,7 @@ public class ReportDAOImpl extends AbstractDAOImpl implements IReportDAO {
 			String alias, int taskDepth) {
 		request.append("concat(").append(alias).append(".tsk_path, ").append(alias).append(".tsk_number, '");
 		for (int i=0; i<taskDepth; i++) {
-			request.append("00");
+			request.append(StringHelper.toHex((short) 0));
 		}
 		request.append("')");
 	}

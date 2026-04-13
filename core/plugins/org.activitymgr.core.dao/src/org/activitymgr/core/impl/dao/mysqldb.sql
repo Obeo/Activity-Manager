@@ -22,8 +22,8 @@ create table COLLABORATOR (
 -- ------------------------------------------------------------
 create table TASK (
 	TSK_ID           integer(   8) not null auto_increment,
-	TSK_PATH         varchar( 255) not null,
-	TSK_NUMBER       varchar(   2) not null,
+	TSK_PATH         varchar( 512) not null,
+	TSK_NUMBER       varchar(   4) not null,
 	TSK_CODE         varchar(  20) not null,
 	TSK_NAME         varchar( 150) not null,
 	TSK_BUDGET       integer(   8) not null,

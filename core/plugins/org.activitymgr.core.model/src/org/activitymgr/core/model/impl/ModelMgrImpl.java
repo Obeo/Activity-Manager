@@ -465,8 +465,7 @@ public class ModelMgrImpl implements IModelMgr {
 		task.setPath(parentPath);
 
 		// Génération du numéro de la tâche
-		byte taskNumber = taskDAO.newTaskNumber(parentPath);
-		task.setNumber(taskNumber);
+		task.setNumber(taskDAO.newTaskNumber(parentPath));
 
 		// Création de la tache
 		return taskDAO.insert(task);
@@ -983,13 +982,12 @@ public class ModelMgrImpl implements IModelMgr {
 		log.debug("Fullpath='" + parentTaskFullPath + "'"); //$NON-NLS-1$ //$NON-NLS-2$
 		String path = parentTaskFullPath.substring(0,
 				parentTaskFullPath.length() - TASK_PATH_SEGMENT_SIZE);
-		byte number = StringHelper.toByte(parentTaskFullPath
+		short number = StringHelper.toShort(parentTaskFullPath
 				.substring(parentTaskFullPath.length() - TASK_PATH_SEGMENT_SIZE));
 		log.debug(" => path=" + path); //$NON-NLS-1$
 		log.debug(" => number=" + number); //$NON-NLS-1$
 
 		return getTask(path, number);
-
 	}
 
 	@Override
@@ -1208,7 +1206,7 @@ public class ModelMgrImpl implements IModelMgr {
 		verifyTaskPath(task);
 
 		// Recherche de la tache à descendre (incrémentation du numéro)
-		byte taskToMoveUpNumber = (byte) (task.getNumber() + 1);
+		short taskToMoveUpNumber = (short) (task.getNumber() + 1);
 		Task taskToMoveUp = getTask(task.getPath(), taskToMoveUpNumber);
 		verify("TASK_CANNOT_BE_MOVED_DOWN", taskToMoveUp != null); //$NON-NLS-1$
 
@@ -1217,7 +1215,7 @@ public class ModelMgrImpl implements IModelMgr {
 	}
 
 	@Override
-	public void moveTaskUpOrDown(Task task, int newTaskNumber)
+	public void moveTaskUpOrDown(Task task, short newTaskNumber)
 			throws ModelException {
 		// Le chemin de la tache et son numéro ne doivent pas avoir changés
 		// pour pouvoir invoquer cette méthode
@@ -1240,11 +1238,13 @@ public class ModelMgrImpl implements IModelMgr {
 		}
 
 		// Définition du sens de déplacement
-		int stepSign = task.getNumber() > newTaskNumber ? -1 : 1;
-		for (int i = task.getNumber() + stepSign; i != newTaskNumber + stepSign; i+=stepSign) {
-			Task taskToToggle = getTask(task.getPath(), (byte) i);
+		short stepSign = (short) (task.getNumber() > newTaskNumber ? -1 : 1);
+		for (short i = (short) (task.getNumber() + stepSign);
+				i != (short) (newTaskNumber + stepSign);
+				i = (short) (i + stepSign)) {
+			Task taskToToggle = getTask(task.getPath(), i);
 			toggleTasks(task, taskToToggle);
-			task.setNumber((byte) i);
+			task.setNumber(i);
 		}
 	}
 
@@ -1300,7 +1300,7 @@ public class ModelMgrImpl implements IModelMgr {
 		Task[] subTasksToMove = getSubTasks(task);
 
 		// Déplacement de la tache
-		byte number = taskDAO.newTaskNumber(destPath);
+		short number = taskDAO.newTaskNumber(destPath);
 		task.setPath(destPath);
 		task.setNumber(number);
 		taskDAO.update(task);
@@ -1324,7 +1324,7 @@ public class ModelMgrImpl implements IModelMgr {
 		verifyTaskPath(task);
 
 		// Recherche de la tache à monter (décrémentation du numéro)
-		byte taskToMoveDownNumber = (byte) (task.getNumber() - 1);
+		short taskToMoveDownNumber = (short) (task.getNumber() - 1);
 		Task taskToMoveDown = getTask(task.getPath(), taskToMoveDownNumber);
 		verify("TASK_CANNOT_BE_MOVED_UP", taskToMoveDown != null); //$NON-NLS-1$
 
@@ -1344,8 +1344,8 @@ public class ModelMgrImpl implements IModelMgr {
 		Task[] tasks = getSubTasks(parentTask);
 		for (int i = 0; i < tasks.length; i++) {
 			Task task = tasks[i];
-			byte taskNumber = task.getNumber();
-			byte expectedNumber = (byte) (i + 1);
+			short taskNumber = task.getNumber();
+			short expectedNumber = (short) (i + 1);
 			if (taskNumber != expectedNumber) {
 				Task[] subTasks = getSubTasks(task);
 				task.setNumber(expectedNumber);
@@ -1467,8 +1467,8 @@ public class ModelMgrImpl implements IModelMgr {
 	 *            la 2nde tache.
 	 */
 	private void toggleTasks(Task task1, Task task2) {
-		byte task1InitialNumber = task1.getNumber();
-		byte task2InitialNumber = task2.getNumber();
+		short task1InitialNumber = task1.getNumber();
+		short task2InitialNumber = task2.getNumber();
 		String task1InitialFullpath = task1.getFullPath();
 		String task2InitialFullpath = task2.getFullPath();
 
@@ -1477,7 +1477,7 @@ public class ModelMgrImpl implements IModelMgr {
 		Task[] task2subTasks = getSubTasks(task2);
 
 		// Changement des numéros de la tache 1 avec une valeur fictive
-		task1.setNumber((byte) 0);
+		task1.setNumber((short) 0);
 		taskDAO.update(task1);
 		changeTasksPaths(task1subTasks, task1InitialFullpath.length(),
 				task1.getFullPath());
@@ -1605,7 +1605,7 @@ public class ModelMgrImpl implements IModelMgr {
 		return task;
 	}
 
-	private Task getTask(String taskPath, byte taskNumber) {
+	private Task getTask(String taskPath, short taskNumber) {
 		Task[] tasks = taskDAO.select(
 				new String[] { PATH_ATTRIBUTE, "number" }, 
 				new Object[] { taskPath, taskNumber }, 

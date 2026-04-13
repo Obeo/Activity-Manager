@@ -45,93 +45,45 @@ import org.apache.log4j.Logger;
  */
 public class StringHelper extends StringUtils {
 
-	/** Max base32 value (1024) */
-	private static final int MAX_BASE32_VALUE = 0x400;
-
 	/** Logger */
 	private static Logger log = Logger.getLogger(StringHelper.class);
 
-	/** Tableau de caractères utilisé pour la transformation Hexadécimale */
+	/** Tableau de caractères utilisés pour la transformation Hexadécimale */
 	private static final char[] HEX_CARS = new char[] { '0', '1', '2', '3', '4', '5',
 			'6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
-
-	/** Base 32 encoding characters array */
-	private static char BASE32_CARS[] = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
-		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-		'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V' };
 
 	/** Formatteur de date */
 	private static SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd"); //$NON-NLS-1$
 
 	/**
-	 * Convertit un octet en hexadécimal.
-	 * 
-	 * @param b
-	 *            l'octet à convertir.
+	 * Convertit un short en hexadécimal non signé.
+	 *
+	 * @param s
+	 *            le short à convertir.
 	 * @return la valeur hexadécimale.
 	 */
-	public static String toHex(byte b) {
-		char[] result = new char[2];
-		result[0] = HEX_CARS[(b >> 4) & 0x0F];
-		result[1] = HEX_CARS[b & 0x0F];
+	public static String toHex(short s) {
+		return toHex(s & 0xFFFF, 4);
+	}
+
+	private static String toHex(int value, int width) {
+		char[] result = new char[width];
+		for (int i = width - 1; i >= 0; i--) {
+			result[i] = HEX_CARS[value & 0x0F];
+			value >>= 4;
+		}
 		return new String(result);
 	}
 
 	/**
-	 * Encodes a value in Base 32.
-	 * <p>The given value must be less than <code>0x400</code> (=<code>1024</code>) to ensure that the result is 2 characters long.
-	 * 
-	 * @param value
-	 *            the value to encode.
-	 * @return the encoded value.
-	 */
-	public static String toBase32(int value) {
-		if (value >= MAX_BASE32_VALUE) {
-			throw new IllegalArgumentException("Value is greater than " + MAX_BASE32_VALUE);
-		}
-		char[] result = new char[2];
-		result[0] = BASE32_CARS[(value >> 5) & 0x1F];
-		result[1] = BASE32_CARS[value & 0x1F];
-		return new String(result);
-	}
-	
-	/**
-	 * Decodes a base 32 string.
-	 * <p>
-	 * The string is expected to be 2 characters long.
-	 * </p>
-	 * 
-	 * @param str
-	 *            the string to decode.
-	 * @return the decoded value.
-	 */
-	public static int fromBase32(String str) {
-		char[] cars = str.toCharArray();
-		if (cars.length != 2) {
-			throw new IllegalArgumentException("Base 32 value is expected to be 2 characters long");
-		}
-		return (decodeBase32Digit((byte) cars[0]) << 5)
-				+ decodeBase32Digit((byte) cars[1]);
-	}
-
-	private static int decodeBase32Digit(byte data) {
-		char charData = (char) data;
-		if (charData <= 'V' && charData >= 'A')
-			return charData - 'A' + 10;
-		if (charData <= '9' && charData >= '0')
-			return charData - '0';
-		throw new IllegalArgumentException("Invalid base 32 char to decode: " + data); //$NON-NLS-1$
-	}
-	
-	/**
-	 * Convertit une chaine hexadécimal en octet.
-	 * 
+	 * Convertit une chaine hexadécimal en short.
+	 *
 	 * @param hex
 	 *            la chaine à convertir.
 	 * @return la valeur binaire.
 	 */
-	public static byte toByte(String hex) {
-		return (byte) Integer.parseInt(hex, 16);
+	public static short toShort(String hex) {
+		return (short) Integer.parseInt(hex, 16);
 	}
 
 	/**

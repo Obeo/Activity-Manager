@@ -1030,7 +1030,7 @@ public class TasksUI extends AbstractTableMgrUI
 			needRefresh = true;
 		}
 		// Déplacement de la tache
-		int targetNumber = chosenTask.getNumber();
+		short targetNumber = chosenTask.getNumber();
 		if (before && targetNumber > taskToMove.getNumber()) {
 			targetNumber--;
 		} else if (!before && targetNumber < taskToMove.getNumber()) {

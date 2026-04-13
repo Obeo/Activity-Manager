@@ -37,7 +37,7 @@ public class TaskDAOCache {
 		if (!taskByPathCache.containsKey(fullpath)) {
 			int pathLength = fullpath.length() - Task.PATH_SGM_SIZE;
 			String path = fullpath.substring(0, pathLength);
-			byte number = StringHelper.toByte(fullpath
+			short number = StringHelper.toShort(fullpath
 					.substring(pathLength));
 
 			Task task = selectTaskBySegment(path, "number", number);
