@@ -31,6 +31,8 @@ public class TaskDAOImpl extends AbstractORMDAOImpl<Task> implements ITaskDAO {
 
 	/** Logger */
 	private static Logger log = Logger.getLogger(TaskDAOImpl.class);
+
+	private static final int TASK_PATH_SEGMENT_SIZE = Task.PATH_SGM_SIZE;
 	
 	@Override
 	public int getSubTasksCount(long parentTaskId) throws DAOException {
@@ -55,9 +57,9 @@ public class TaskDAOImpl extends AbstractORMDAOImpl<Task> implements ITaskDAO {
 		String query = "select distinct " + getColumnNamesRequestFragment("subtask")  //$NON-NLS-1$  //$NON-NLS-2$
 			+ " from TASK as subtask" //$NON-NLS-1$
 			+ "   inner join TASK filteredTask on (" //$NON-NLS-1$
-			+ "     left(concat(filteredTask.tsk_path, filteredTask.tsk_number), length(subtask.tsk_path) + 2) " //$NON-NLS-1$
+			+ "     left(concat(filteredTask.tsk_path, filteredTask.tsk_number), length(subtask.tsk_path) + " + TASK_PATH_SEGMENT_SIZE + ") " //$NON-NLS-1$
 			+ "        = concat(subtask.tsk_path, subtask.tsk_number)" //$NON-NLS-1$
-			+ "     or left(concat(subtask.tsk_path, subtask.tsk_number), length(filteredTask.tsk_path) + 2) " //$NON-NLS-1$
+			+ "     or left(concat(subtask.tsk_path, subtask.tsk_number), length(filteredTask.tsk_path) + " + TASK_PATH_SEGMENT_SIZE + ") " //$NON-NLS-1$
 			+ "        = concat(filteredTask.tsk_path, filteredTask.tsk_number)" //$NON-NLS-1$
 			+ " )" //$NON-NLS-1$
 			+ " where" //$NON-NLS-1$
@@ -307,7 +309,7 @@ public class TaskDAOImpl extends AbstractORMDAOImpl<Task> implements ITaskDAO {
 	@Override
 	public int getMaxTaskDepthUnder(String path) throws DAOException {
 		try(PreparedStatement pStmt = tx().prepareStatement(
-				"select (max(length(tsk_path))/2+1) from TASK where tsk_path like ?")) {
+				"select (max(length(tsk_path))/" + TASK_PATH_SEGMENT_SIZE + "+1) from TASK where tsk_path like ?")) {
 			// Préparation de la requête
 			pStmt.setString(1, path + "%");
 			
@@ -320,9 +322,9 @@ public class TaskDAOImpl extends AbstractORMDAOImpl<Task> implements ITaskDAO {
 	
 	
 	protected static String[] getAllPaths(String path) {
-		String[] result = new String[path.length()/2];
+		String[] result = new String[path.length()/TASK_PATH_SEGMENT_SIZE];
 		for (int i = 0; i < result.length; i++) {
-			result[i] = path.substring(0, path.length() - i*2);
+			result[i] = path.substring(0, path.length() - i*TASK_PATH_SEGMENT_SIZE);
 		}
 		return result;
 	}

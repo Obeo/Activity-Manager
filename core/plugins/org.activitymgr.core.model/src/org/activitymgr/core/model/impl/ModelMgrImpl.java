@@ -120,6 +120,8 @@ import com.google.inject.Inject;
  */
 public class ModelMgrImpl implements IModelMgr {
 
+	private static final int TASK_PATH_SEGMENT_SIZE = Task.PATH_SGM_SIZE;
+
 	// On trie les taches manuellement car le tri base de données
 	// pose un problème dans la mesure ou la BDD considère le champ
 	// tsk_path comme numérique pour le tri ce qui pose un pb
@@ -980,9 +982,9 @@ public class ModelMgrImpl implements IModelMgr {
 		// Extraction du chemin et du numéro de la tache recherchée
 		log.debug("Fullpath='" + parentTaskFullPath + "'"); //$NON-NLS-1$ //$NON-NLS-2$
 		String path = parentTaskFullPath.substring(0,
-				parentTaskFullPath.length() - 2);
+				parentTaskFullPath.length() - TASK_PATH_SEGMENT_SIZE);
 		byte number = StringHelper.toByte(parentTaskFullPath
-				.substring(parentTaskFullPath.length() - 2));
+				.substring(parentTaskFullPath.length() - TASK_PATH_SEGMENT_SIZE));
 		log.debug(" => path=" + path); //$NON-NLS-1$
 		log.debug(" => number=" + number); //$NON-NLS-1$
 
@@ -2133,7 +2135,7 @@ public class ModelMgrImpl implements IModelMgr {
 		// If the root task Id is a leaf task, the SQL request returns 0 (as there are no child task)
 		int maxTaskDepthUnder = taskDAO.getMaxTaskDepthUnder(path);
 		return maxTaskDepthUnder > 0 
-			? maxTaskDepthUnder - (path.length() / 2) 
+			? maxTaskDepthUnder - (path.length() / TASK_PATH_SEGMENT_SIZE)
 			: 0;
 	}
 

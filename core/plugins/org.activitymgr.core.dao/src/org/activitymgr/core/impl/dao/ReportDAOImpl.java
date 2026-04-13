@@ -22,6 +22,7 @@ import org.activitymgr.core.dto.report.Report;
 import org.activitymgr.core.dto.report.ReportIntervalType;
 import org.activitymgr.core.dto.report.ReportItem;
 import org.activitymgr.core.util.DateHelper;
+import org.activitymgr.core.util.StringHelper;
 import org.activitymgr.core.util.Strings;
 import org.apache.log4j.Logger;
 
@@ -31,6 +32,8 @@ public class ReportDAOImpl extends AbstractDAOImpl implements IReportDAO {
 
 	/** Logger */
 	private static Logger log = Logger.getLogger(ReportDAOImpl.class);
+
+	private static final int TASK_PATH_SEGMENT_SIZE = Task.PATH_SGM_SIZE;
 	
 	@Inject
 	private ITaskDAO taskDAO;
@@ -56,7 +59,7 @@ public class ReportDAOImpl extends AbstractDAOImpl implements IReportDAO {
 			 * Retrieve task tree
 			 */
 			String rootPath = rootTask != null ? rootTask.getFullPath() : "";
-			int activityPathLength = taskDepth*2 + (rootPath != null ? rootPath.length() : 0);
+			int activityPathLength = taskDepth * TASK_PATH_SEGMENT_SIZE + (rootPath != null ? rootPath.length() : 0);
 			Map<Long, TaskSums> tasksByIdCache = new HashMap<Long, TaskSums>();
 			Map<String, TaskSums> tasksByFullPathCache = new HashMap<String, TaskSums>();
 			List<TaskSums> orderedTasks = new ArrayList<TaskSums>();
@@ -83,7 +86,7 @@ public class ReportDAOImpl extends AbstractDAOImpl implements IReportDAO {
 					pStmt.setString(paramIdx++, rootPath + "%");
 				}
 				
-				pStmt.setInt(paramIdx++, activityPathLength-2);
+				pStmt.setInt(paramIdx++, activityPathLength - TASK_PATH_SEGMENT_SIZE);
 				rs = pStmt.executeQuery();
 				
 				while (rs.next()) {
@@ -277,8 +280,8 @@ public class ReportDAOImpl extends AbstractDAOImpl implements IReportDAO {
 				}
 			}
 			if (byActivity) {
-				pStmt.setInt(idx++, activityPathLength-2);
-				pStmt.setInt(idx++, activityPathLength-2);
+				pStmt.setInt(idx++, activityPathLength - TASK_PATH_SEGMENT_SIZE);
+				pStmt.setInt(idx++, activityPathLength - TASK_PATH_SEGMENT_SIZE);
 			}
 			pStmt.setLong(idx++, startDate);
 			pStmt.setLong(idx++, endDate);
@@ -435,13 +438,13 @@ public class ReportDAOImpl extends AbstractDAOImpl implements IReportDAO {
 
 	private Task[] buildTasksList(String rootPath,
 			Map<String, TaskSums> tasksByFullPathCache, String fullpath) {
-		int depth = (fullpath.length() - rootPath.length()) / 2;
+		int depth = (fullpath.length() - rootPath.length()) / TASK_PATH_SEGMENT_SIZE;
 		Task[] tasks = null;
 		if (depth > 0) {
 			tasks = new Task[depth - 1];
 			for (int i = 0; i < depth - 1; i++) {
 				tasks[i] = tasksByFullPathCache.get(
-						fullpath.substring(0, (i + 1) * 2 + rootPath.length()))
+						fullpath.substring(0, (i + 1) * TASK_PATH_SEGMENT_SIZE + rootPath.length()))
 						.getTask();
 			}
 		} else {
