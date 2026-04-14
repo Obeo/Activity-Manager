@@ -1210,8 +1210,7 @@ public class ModelMgrImpl implements IModelMgr {
 		Task taskToMoveUp = getTask(task.getPath(), taskToMoveUpNumber);
 		verify("TASK_CANNOT_BE_MOVED_DOWN", taskToMoveUp != null); //$NON-NLS-1$
 
-		// Inversion des taches
-		toggleTasks(task, taskToMoveUp);
+		moveTaskUpOrDown(task, taskToMoveUpNumber);
 	}
 
 	@Override
@@ -1237,15 +1236,7 @@ public class ModelMgrImpl implements IModelMgr {
 			throw new ModelException("Invalid task number");
 		}
 
-		// Définition du sens de déplacement
-		short stepSign = (short) (task.getNumber() > newTaskNumber ? -1 : 1);
-		for (short i = (short) (task.getNumber() + stepSign);
-				i != (short) (newTaskNumber + stepSign);
-				i = (short) (i + stepSign)) {
-			Task taskToToggle = getTask(task.getPath(), i);
-			toggleTasks(task, taskToToggle);
-			task.setNumber(i);
-		}
+		moveTaskWithinSiblings(task, parentTask, newTaskNumber);
 	}
 
 	@Override
@@ -1328,8 +1319,7 @@ public class ModelMgrImpl implements IModelMgr {
 		Task taskToMoveDown = getTask(task.getPath(), taskToMoveDownNumber);
 		verify("TASK_CANNOT_BE_MOVED_UP", taskToMoveDown != null); //$NON-NLS-1$
 
-		// Inversion des taches
-		toggleTasks(task, taskToMoveDown);
+		moveTaskUpOrDown(task, taskToMoveDownNumber);
 	}
 
 	/**
@@ -1493,6 +1483,42 @@ public class ModelMgrImpl implements IModelMgr {
 		taskDAO.update(task1);
 		changeTasksPaths(task1subTasks, task1InitialFullpath.length(),
 				task1.getFullPath());
+	}
+
+	private void moveTaskWithinSiblings(Task taskToMove, Task parentTask,
+			short newTaskNumber) {
+		Task[] siblings = getSubTasks(parentTask);
+		short currentTaskNumber = taskToMove.getNumber();
+
+		// Free the target task number once, then shift impacted siblings only once each.
+		updateTaskNumberAndSubTasks(taskToMove, (short) 0);
+
+		if (newTaskNumber < currentTaskNumber) {
+			for (int i = siblings.length - 1; i >= 0; i--) {
+				Task sibling = siblings[i];
+				short siblingNumber = sibling.getNumber();
+				if (siblingNumber >= newTaskNumber && siblingNumber < currentTaskNumber) {
+					updateTaskNumberAndSubTasks(sibling, (short) (siblingNumber + 1));
+				}
+			}
+		} else {
+			for (Task sibling : siblings) {
+				short siblingNumber = sibling.getNumber();
+				if (siblingNumber <= newTaskNumber && siblingNumber > currentTaskNumber) {
+					updateTaskNumberAndSubTasks(sibling, (short) (siblingNumber - 1));
+				}
+			}
+		}
+
+		updateTaskNumberAndSubTasks(taskToMove, newTaskNumber);
+	}
+
+	private void updateTaskNumberAndSubTasks(Task task, short newTaskNumber) {
+		String initialTaskFullPath = task.getFullPath();
+		Task[] subTasks = getSubTasks(task);
+		task.setNumber(newTaskNumber);
+		taskDAO.update(task);
+		changeTasksPaths(subTasks, initialTaskFullPath.length(), task.getFullPath());
 	}
 
 	@Override
