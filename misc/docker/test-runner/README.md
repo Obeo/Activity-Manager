@@ -48,3 +48,21 @@ Notes:
 - `-Dgit.dirty=ignore` is passed on purpose so local work-in-progress does not block the build.
 - Maven dependencies are cached in the named Docker volume `activity-manager-m2`.
 - The Dockerfile downloads a Java 11 JDK from Eclipse Adoptium and Maven 3.9.9 during image build time.
+
+Run the same tests against MySQL 5.5.47:
+
+```bash
+docker compose -f misc/docker/test-runner/compose.mysql55.yml up --build --abort-on-container-exit tests
+```
+
+Stop the stack:
+
+```bash
+docker compose -f misc/docker/test-runner/compose.mysql55.yml down -v
+```
+
+Notes for the MySQL scenario:
+
+- The `tests` service keeps using the same runner image and script.
+- The MySQL-specific JDBC settings are injected through environment variables, so the default H2 configuration remains unchanged outside Compose.
+- The `mysql55` service runs a local image based on the official MySQL 5.5.47 generic binary tarball.
