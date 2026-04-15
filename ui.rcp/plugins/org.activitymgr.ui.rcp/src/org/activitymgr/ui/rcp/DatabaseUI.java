@@ -102,7 +102,7 @@ public class DatabaseUI implements ModifyListener {
 
 	/** Constantes */
 	public static final int STANDALONE_MODE = 0;
-	public static final int MYSQL_SERVER_MODE = 1;
+	public static final int MARIADB_MODE = 1;
 	public static final int USER_DEFINED_MODE = 2;
 
 	/** Model manager */
@@ -211,7 +211,7 @@ public class DatabaseUI implements ModifyListener {
 		dbTypeCombo.add(Strings
 				.getString("DatabaseUI.databasetypes.STANDALONE_MODE")); //$NON-NLS-1$
 		dbTypeCombo.add(Strings
-				.getString("DatabaseUI.databasetypes.MYSQL_SERVER")); //$NON-NLS-1$
+				.getString("DatabaseUI.databasetypes.MARIA_DB")); //$NON-NLS-1$
 		dbTypeCombo.add(Strings
 				.getString("DatabaseUI.databasetypes.USER_DEFINED")); //$NON-NLS-1$
 		dbTypeCombo.select(STANDALONE_MODE);
@@ -455,8 +455,8 @@ public class DatabaseUI implements ModifyListener {
 			enabledField(dbDataFileText, conectionPanel,
 					"data/activitymgr", false); //$NON-NLS-1$
 			break;
-		// Cas d'une connexion MySQL
-		case MYSQL_SERVER_MODE:
+		// Cas d'une connexion MariaDB
+		case MARIADB_MODE:
 			enabledField(dbHostText, "localhost", false); //$NON-NLS-1$
 			enabledField(dbPortText, "3306", true); //$NON-NLS-1$
 			enabledField(dbNameText, "taskmgr_db", false); //$NON-NLS-1$
@@ -598,8 +598,8 @@ public class DatabaseUI implements ModifyListener {
 			jdbcUserIdText.setText("sa"); //$NON-NLS-1$
 			jdbcPasswordText.setText(""); //$NON-NLS-1$
 			break;
-		// Cas d'une connexion MySQL
-		case MYSQL_SERVER_MODE:
+		// Cas d'une connexion MariaDB
+		case MARIADB_MODE:
 			jdbcDriverText.setText("com.mysql.cj.jdbc.Driver"); //$NON-NLS-1$
 			dbDataFileText.setStringValue(""); //$NON-NLS-1$
 			jdbcUrlText
