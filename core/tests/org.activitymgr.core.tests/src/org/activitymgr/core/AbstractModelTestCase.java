@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -41,6 +42,12 @@ public abstract class AbstractModelTestCase extends TestCase implements
 					DbHelper.shutdowHsqlOrH2(con);
 				}
 				datasource.close();
+			} catch (SQLException e) {
+				// H2 may already be closed by the JVM when the shutdown hook runs.
+				if (e.getMessage() == null
+						|| !e.getMessage().contains("Database is already closed")) {
+					e.printStackTrace();
+				}
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
