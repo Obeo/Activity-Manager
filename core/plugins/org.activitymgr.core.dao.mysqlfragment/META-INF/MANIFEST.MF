@@ -5,5 +5,4 @@ Bundle-SymbolicName: org.activitymgr.core.dao.mysqlfragment
 Bundle-Version: 1.4.4.qualifier
 Fragment-Host: org.apache.commons.dbcp
 Bundle-RequiredExecutionEnvironment: JavaSE-11
-Bundle-ClassPath: mysql-connector-j-8.4.0.jar,
- mariadb-java-client-3.4.1.jar
+Bundle-ClassPath: mariadb-java-client-3.4.1.jar
