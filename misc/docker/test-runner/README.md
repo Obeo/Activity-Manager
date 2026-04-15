@@ -65,4 +65,4 @@ Notes for the MySQL scenario:
 
 - The `tests` service keeps using the same runner image and script.
 - The MySQL-specific JDBC settings are injected through environment variables, so the default H2 configuration remains unchanged outside Compose.
-- The `mysql55` service runs a local image based on the official MySQL 5.5.47 generic binary tarball.
+- The `mysql55` service installs MySQL from the official Debian Jessie repositories to stay close to a standard Jessie setup.

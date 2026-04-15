@@ -2,14 +2,14 @@ services:
   mysql55:
     build:
       context: ../mysql55
-    image: activity-manager-mysql55:5.5.47
+    image: activity-manager-mysql55:jessie
     container_name: activity-manager-mysql55
     environment:
       MYSQL_DATABASE: taskmgr_db
       MYSQL_USER: taskmgr_user
       MYSQL_PASSWORD: secret
     healthcheck:
-      test: ["CMD-SHELL", "/opt/mysql/bin/mysqladmin --user=root --host=127.0.0.1 --port=3306 ping --silent"]
+      test: ["CMD-SHELL", "mysqladmin --user=root --host=127.0.0.1 --port=3306 ping --silent"]
       interval: 5s
       timeout: 5s
       retries: 30
