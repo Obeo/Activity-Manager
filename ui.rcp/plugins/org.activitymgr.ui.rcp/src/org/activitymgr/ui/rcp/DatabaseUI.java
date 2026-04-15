@@ -600,7 +600,7 @@ public class DatabaseUI implements ModifyListener {
 			break;
 		// Cas d'une connexion MySQL
 		case MYSQL_SERVER_MODE:
-			jdbcDriverText.setText("com.mysql.jdbc.Driver"); //$NON-NLS-1$
+			jdbcDriverText.setText("com.mysql.cj.jdbc.Driver"); //$NON-NLS-1$
 			dbDataFileText.setStringValue(""); //$NON-NLS-1$
 			jdbcUrlText
 					.setText("jdbc:mysql://" + dbHostText.getText() + ":" + dbPortText.getText() + "/" + dbNameText.getText()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$

@@ -139,7 +139,7 @@ public class LogicModule extends AbstractModule {
 	private DataSource createDataSource(IConfiguration cfg) {
 		BasicDataSource datasource = new BasicDataSource();
 		IConfiguration jdbcCfg = cfg.getScoped("activitymgr.jdbc", null);
-		datasource.setDriverClassName(jdbcCfg.get("driver", "com.mysql.jdbc.Driver"));
+		datasource.setDriverClassName(jdbcCfg.get("driver", "com.mysql.cj.jdbc.Driver"));
 		datasource.setUrl(jdbcCfg.get("url", "jdbc:mysql://localhost:3306/taskmgr_db"));
 		datasource.setUsername(jdbcCfg.get("user", "taskmgr"));
 		datasource.setPassword(jdbcCfg.get("password", "taskmgr"));
