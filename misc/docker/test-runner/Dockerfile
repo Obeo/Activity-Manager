@@ -1,0 +1,42 @@
+FROM debian/eol:jessie
+
+ARG MAVEN_VERSION=3.9.9
+ARG MAVEN_BASE_URL=https://repo.maven.apache.org/maven2/org/apache/maven/apache-maven/${MAVEN_VERSION}
+ARG TEMURIN_API_URL=https://api.adoptium.net/v3/binary/latest/11/ga/linux/x64/jdk/hotspot/normal/adoptium
+
+ENV JAVA_HOME=/opt/java/openjdk
+ENV MAVEN_HOME=/opt/maven
+ENV MAVEN_CONFIG=/m2
+ENV MAVEN_OPTS="-Xms256m -Xmx2g"
+ENV PATH="${JAVA_HOME}/bin:${MAVEN_HOME}/bin:${PATH}"
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends \
+        bash \
+        ca-certificates \
+        curl \
+        fontconfig \
+        fonts-dejavu-core \
+        git \
+        gzip \
+        libfreetype6 \
+        tar \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /opt/java /opt/maven \
+    && curl -fsSL "${TEMURIN_API_URL}" -o /tmp/jdk11.tar.gz \
+    && tar -xzf /tmp/jdk11.tar.gz -C /opt/java \
+    && mv /opt/java/jdk-* "${JAVA_HOME}" \
+    && rm /tmp/jdk11.tar.gz \
+    && curl -fsSL "${MAVEN_BASE_URL}/apache-maven-${MAVEN_VERSION}-bin.tar.gz" -o /tmp/maven.tar.gz \
+    && tar -xzf /tmp/maven.tar.gz -C /opt/maven --strip-components=1 \
+    && rm /tmp/maven.tar.gz
+
+WORKDIR /workspace
+
+COPY run-core-tests.sh /usr/local/bin/run-core-tests.sh
+
+RUN sed -i 's/\r$//' /usr/local/bin/run-core-tests.sh \
+    && chmod +x /usr/local/bin/run-core-tests.sh
+
+ENTRYPOINT ["/usr/local/bin/run-core-tests.sh"]
