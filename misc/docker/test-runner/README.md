@@ -66,3 +66,20 @@ Notes for the MySQL scenario:
 - The `tests` service keeps using the same runner image and script.
 - The MySQL-specific JDBC settings are injected through environment variables, so the default H2 configuration remains unchanged outside Compose.
 - The `mysql55` service installs MySQL from the official Debian Jessie repositories to stay close to a standard Jessie setup.
+
+Run the tests with a Debian 12 runner and MySQL 8:
+
+```bash
+docker compose -f misc/docker/test-runner/compose.mysql8.yml up --build --abort-on-container-exit tests
+```
+
+Stop that stack:
+
+```bash
+docker compose -f misc/docker/test-runner/compose.mysql8.yml down -v
+```
+
+Notes for the Debian 12 / MySQL 8 scenario:
+
+- The test runner uses `Dockerfile.debian12` and keeps the same Java 11 + Maven bootstrap approach.
+- The MySQL service uses the official `mysql:8.0` image with `mysql_native_password` enabled for compatibility with the legacy Connector/J 5.1.x driver currently embedded by the application.

@@ -1,0 +1,41 @@
+services:
+  mysql8:
+    image: mysql:8.0
+    container_name: activity-manager-mysql8
+    command:
+      - --default-authentication-plugin=mysql_native_password
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: taskmgr_db
+      MYSQL_USER: taskmgr_user
+      MYSQL_PASSWORD: secret
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin --user=root --password=root --host=127.0.0.1 --port=3306 ping --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+    ports:
+      - "3306:3306"
+
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.debian12
+    image: activity-manager-tests:debian12
+    depends_on:
+      mysql8:
+        condition: service_healthy
+    environment:
+      DBCONFIG: mysql
+      MYSQL_DRIVER: com.mysql.cj.jdbc.Driver
+      MYSQL_URL: jdbc:mysql://mysql8:3306/taskmgr_db?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+      MYSQL_USER: taskmgr_user
+      MYSQL_PASSWORD: secret
+      DB_HOST: mysql8
+      DB_PORT: "3306"
+    volumes:
+      - ../../..:/workspace
+      - activity-manager-m2:/m2
+
+volumes:
+  activity-manager-m2:
