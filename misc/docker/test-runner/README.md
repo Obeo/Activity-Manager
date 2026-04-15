@@ -82,4 +82,22 @@ docker compose -f misc/docker/test-runner/compose.mysql8.yml down -v
 Notes for the Debian 12 / MySQL 8 scenario:
 
 - The test runner uses `Dockerfile.debian12` and keeps the same Java 11 + Maven bootstrap approach.
-- The MySQL service uses the official `mysql:8.0` image with `mysql_native_password` enabled for compatibility with the legacy Connector/J 5.1.x driver currently embedded by the application.
+- The MySQL service uses the official `mysql:8.0` image with `mysql_native_password` enabled to keep the test setup compatible with the current JDBC configuration.
+
+Run the tests with a full Debian 12 + MariaDB stack:
+
+```bash
+docker compose -f misc/docker/test-runner/compose.mariadb12.yml up --build --abort-on-container-exit tests
+```
+
+Stop that stack:
+
+```bash
+docker compose -f misc/docker/test-runner/compose.mariadb12.yml down -v
+```
+
+Notes for the Debian 12 / MariaDB scenario:
+
+- Both the runner and the database services are built from Debian 12 images.
+- The database service installs `mariadb-server` from the official Debian 12 repositories.
+- The tests keep using the same JDBC settings shape as the MySQL scenarios, which lets us check compatibility with minimal application changes.
