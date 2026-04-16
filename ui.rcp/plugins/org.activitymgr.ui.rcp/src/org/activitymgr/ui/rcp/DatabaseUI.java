@@ -600,10 +600,10 @@ public class DatabaseUI implements ModifyListener {
 			break;
 		// Cas d'une connexion MariaDB
 		case MARIADB_MODE:
-			jdbcDriverText.setText("com.mysql.cj.jdbc.Driver"); //$NON-NLS-1$
+			jdbcDriverText.setText("org.mariadb.jdbc.Driver"); //$NON-NLS-1$
 			dbDataFileText.setStringValue(""); //$NON-NLS-1$
 			jdbcUrlText
-					.setText("jdbc:mysql://" + dbHostText.getText() + ":" + dbPortText.getText() + "/" + dbNameText.getText()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					.setText("jdbc:mariadb://" + dbHostText.getText() + ":" + dbPortText.getText() + "/" + dbNameText.getText()); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			break;
 		// Cas d'une connexion autre
 		case USER_DEFINED_MODE:

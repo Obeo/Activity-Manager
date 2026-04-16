@@ -100,4 +100,4 @@ Notes for the Debian 12 / MariaDB scenario:
 
 - Both the runner and the database services are built from Debian 12 images.
 - The database service installs `mariadb-server` from the official Debian 12 repositories.
-- The tests keep using the same JDBC settings shape as the MySQL scenarios, which lets us check compatibility with minimal application changes.
+- The MariaDB stack now uses the native MariaDB JDBC driver and a `jdbc:mariadb://...` URL.
