@@ -526,14 +526,24 @@ public class TaskTest extends AbstractModelTestCase {
 		});
 	}
 
-	public void testMoveUpOrDownTask() throws Exception {
+	public void testMoveUpOrDownTask50() throws Exception {
+		testMoveUpOrDownTask(51, 50, "/RT/PARENT/CD");
+	}
+
+	public void testMoveUpOrDownTask150() throws Exception {
+		testMoveUpOrDownTask(151, 140, "/RT/PARENT/CD");
+	}
+
+	protected void testMoveUpOrDownTask(int numberOfTaskToCreate, int taskToMoveNumber, String taskToMoveRootPath) throws Exception {
+		String taskToMovePath = taskToMoveRootPath + taskToMoveNumber;
+		byte newTaskNumber = 2;
 		withSampleTasks(() -> {
-			// Création d'une tache avec 50 taches filles
+			// Création d'une tâche avec <numberOfTaskToCreate> tâches filles
 			Task parentTask = getFactory().newTask();
 			parentTask.setCode("PARENT");
 			parentTask.setName("Parent task");
 			parentTask = getModelMgr().createTask(rootTask, parentTask);
-			for (int i=1; i<=50; i++) {
+			for (int i=1; i<=numberOfTaskToCreate; i++) {
 				Task newTask = getFactory().newTask();
 				newTask.setCode("CD" + i);
 				newTask.setName("Task # " + i);
@@ -541,13 +551,13 @@ public class TaskTest extends AbstractModelTestCase {
 			}
 			// Reload pour rafraichissement du nombre de taches filles
 			parentTask = getModelMgr().getTask(parentTask.getId());
-			assertEquals(50, getModelMgr().getSubTasksCount(parentTask.getId()));
+			assertEquals(numberOfTaskToCreate, getModelMgr().getSubTasksCount(parentTask.getId()));
 
 			// Déplacement impossible
-			Task oneTask = getModelMgr().getTaskByCodePath("/RT/PARENT/CD34");
-			assertEquals(34, oneTask.getNumber());
+			Task oneTask = getModelMgr().getTaskByCodePath(taskToMovePath);
+			assertEquals("The number of task is not the expected one.", taskToMoveNumber, oneTask.getNumber());
 			try {
-				getModelMgr().moveTaskUpOrDown(oneTask, 100);
+				getModelMgr().moveTaskUpOrDown(oneTask, 200);
 				fail("Moving task to 200 is not possible!");
 			}
 			catch (ModelException e) {
@@ -555,32 +565,32 @@ public class TaskTest extends AbstractModelTestCase {
 			}
 
 			// Déplacement d'une tache vers le haut
-			getModelMgr().moveTaskUpOrDown(oneTask, (byte) 3);
-			Task oneTaskClone = getModelMgr().getTaskByCodePath("/RT/PARENT/CD34");
+			getModelMgr().moveTaskUpOrDown(oneTask, newTaskNumber);
+			Task oneTaskClone = getModelMgr().getTaskByCodePath(taskToMovePath);
 			assertEquals(oneTask.getId(), oneTaskClone.getId());
 			assertEquals(oneTask.getName(), oneTaskClone.getName());
-			assertEquals(3, oneTaskClone.getNumber());
+			assertEquals(newTaskNumber, oneTaskClone.getNumber());
 			// Vérification du nombre d'enfants de la tache parent 
-			assertEquals(50, getModelMgr().getSubTasksCount(parentTask.getId()));
+			assertEquals(numberOfTaskToCreate, getModelMgr().getSubTasksCount(parentTask.getId()));
 			// Vérification des numéros des taches
-			for (int i=1; i<=50; i++) {
-				int taskNumber = getModelMgr().getTaskByCodePath("/RT/PARENT/CD" + i).getNumber();
-				if (i<3)
-					assertEquals(i, taskNumber);
-				else if (i>=3 && i<34)
-					assertEquals(i+1, taskNumber);
-				else if (i==34)
-					assertEquals(3, taskNumber);
+			for (int i=1; i<=numberOfTaskToCreate; i++) {
+				int currentTaskNumber = getModelMgr().getTaskByCodePath(taskToMoveRootPath + i).getNumber();
+				if (i<newTaskNumber)
+					assertEquals(i, currentTaskNumber);
+				else if (i>=newTaskNumber && i<taskToMoveNumber)
+					assertEquals(i+1, currentTaskNumber);
+				else if (i==taskToMoveNumber)
+					assertEquals(newTaskNumber, currentTaskNumber);
 				else 
-					assertEquals(i, taskNumber);
+					assertEquals(i, currentTaskNumber);
 			}
 
 			// Déplacement inverse
-			getModelMgr().moveTaskUpOrDown(oneTaskClone, (byte) 34);
+			getModelMgr().moveTaskUpOrDown(oneTaskClone, (byte) taskToMoveNumber);
 			// Vérification des numéros des taches
-			for (int i=1; i<=50; i++) {
-				int taskNumber = getModelMgr().getTaskByCodePath("/RT/PARENT/CD" + i).getNumber();
-				assertEquals(i, taskNumber);
+			for (int i=1; i<=numberOfTaskToCreate; i++) {
+				int currentTaskNumber = getModelMgr().getTaskByCodePath(taskToMoveRootPath + i).getNumber();
+				assertEquals(i, currentTaskNumber);
 			}
 
 		});
