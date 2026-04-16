@@ -141,7 +141,7 @@ public class ModelMgrImpl implements IModelMgr {
 	// de chaînes (en java), on a bien 0102 > 010101 et 010102.
 
 
-	private static final Comparator<Task> TASK_PATH_SORTER = Comparator.comparing(it -> it.getFullPath());
+	private static final Comparator<Task> TASK_PATH_SORTER = Comparator.comparing(Task::getFullPath);
 	
 	/** Logger */
 	private static Logger log = Logger.getLogger(ModelMgrImpl.class);
