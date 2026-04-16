@@ -14,7 +14,8 @@ import org.activitymgr.core.model.ModelException;
 import org.activitymgr.core.util.StringHelper;
 
 public class TaskTest extends AbstractModelTestCase {
-
+	private static final long MAX_MOVE_DURATION_MS = 8L;
+	
 	/** Taches de test */
 	private Task rootTask;
 	private Task task1;
@@ -565,7 +566,9 @@ public class TaskTest extends AbstractModelTestCase {
 			}
 
 			// Déplacement d'une tache vers le haut
+			long startNanos = System.nanoTime();
 			getModelMgr().moveTaskUpOrDown(oneTask, newTaskNumber);
+			long elapsedMs = (System.nanoTime() - startNanos) / 1_000_000L;
 			Task oneTaskClone = getModelMgr().getTaskByCodePath(taskToMovePath);
 			assertEquals(oneTask.getId(), oneTaskClone.getId());
 			assertEquals(oneTask.getName(), oneTaskClone.getName());
@@ -584,15 +587,22 @@ public class TaskTest extends AbstractModelTestCase {
 				else 
 					assertEquals(i, currentTaskNumber);
 			}
-
+			System.out.println("Performance move test from " + taskToMoveNumber + " to " + newTaskNumber + ": "+ elapsedMs + " ms");
+			assertTrue("Move should take less than " + MAX_MOVE_DURATION_MS + " ms but took " + elapsedMs + " ms",
+					elapsedMs < MAX_MOVE_DURATION_MS);
+			
 			// Déplacement inverse
+			startNanos = System.nanoTime();
 			getModelMgr().moveTaskUpOrDown(oneTaskClone, taskToMoveNumber);
+			elapsedMs = (System.nanoTime() - startNanos) / 1_000_000L;
 			// Vérification des numéros des taches
 			for (int i=1; i<=numberOfTaskToCreate; i++) {
 				int currentTaskNumber = getModelMgr().getTaskByCodePath(taskToMoveRootPath + i).getNumber();
 				assertEquals(i, currentTaskNumber);
 			}
-
+			System.out.println("Performance move test from " + newTaskNumber + " to " + taskToMoveNumber + ": "+ elapsedMs + " ms");
+			assertTrue("Move should take less than " + MAX_MOVE_DURATION_MS + " ms but took " + elapsedMs + " ms",
+					elapsedMs < MAX_MOVE_DURATION_MS);
 		});
 	}
 
