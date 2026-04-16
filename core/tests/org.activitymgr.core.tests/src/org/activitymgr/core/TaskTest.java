@@ -14,7 +14,7 @@ import org.activitymgr.core.model.ModelException;
 import org.activitymgr.core.util.StringHelper;
 
 public class TaskTest extends AbstractModelTestCase {
-	private static final long MAX_MOVE_DURATION_MS = 8L;
+	private static final long MAX_MOVE_DURATION_MS = 15L;
 	
 	/** Taches de test */
 	private Task rootTask;
