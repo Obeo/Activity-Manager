@@ -18,8 +18,8 @@ create table COLLABORATOR (
 -- ------------------------------------------------------------
 create table TASK (
 	TSK_ID           integer(   8) not null auto_increment,
-	TSK_PATH         varchar( 255) not null,
-	TSK_NUMBER       varchar(   2) not null,
+	TSK_PATH         varchar( 512) not null,
+	TSK_NUMBER       varchar(   4) not null,
 	TSK_CODE         varchar(  20) not null,
 	TSK_NAME         varchar( 150) not null,
 	TSK_BUDGET       integer(   8) not null,
@@ -101,3 +101,10 @@ insert into DURATION (DUR_ID, DUR_IS_ACTIVE) values ( 75, 1);
 insert into DURATION (DUR_ID, DUR_IS_ACTIVE) values (100, 1);
 
 -- delete from Duration where dur_id = 25
+
+
+-- -----------------------------------------------------------
+-- Patch 1.2.0
+-- -----------------------------------------------------------
+-- alter table Task drop TSK_CLOSED; -- [IF EXISTS] is not a thing in MySQL
+alter table TASK add TSK_CLOSED integer(1) not null; -- Set 0 to existing values

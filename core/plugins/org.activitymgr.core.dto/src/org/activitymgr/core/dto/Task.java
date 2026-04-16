@@ -42,8 +42,8 @@ import org.activitymgr.core.util.StringHelper;
 public class Task extends SimpleIdentityBean {
 	
 	
-	// A path segment is 2 char (limited to 256).
-	public static final int PATH_SGM_SIZE = 2;
+	// A path segment is 4 hexadecimal chars.
+	public static final int PATH_SGM_SIZE = 4;
 	
 
 	/** Chemin de la tache */
@@ -51,7 +51,7 @@ public class Task extends SimpleIdentityBean {
 
 	/** Numéro de la tâche */
 	@Converter(TaskNumberConverter.class)
-	private byte number;
+	private short number;
 
 	/** Code de la tache */
 	private String code;
@@ -119,7 +119,7 @@ public class Task extends SimpleIdentityBean {
 	/**
 	 * @return le numéro de la tache.
 	 */
-	public byte getNumber() {
+	public short getNumber() {
 		return number;
 	}
 
@@ -190,7 +190,7 @@ public class Task extends SimpleIdentityBean {
 	 * @param number
 	 *            le nouveau numéro.
 	 */
-	public void setNumber(byte number) {
+	public void setNumber(short number) {
 		this.number = number;
 	}
 

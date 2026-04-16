@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Proxy;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -41,6 +42,12 @@ public abstract class AbstractModelTestCase extends TestCase implements
 					DbHelper.shutdowHsqlOrH2(con);
 				}
 				datasource.close();
+			} catch (SQLException e) {
+				// H2 may already be closed by the JVM when the shutdown hook runs.
+				if (e.getMessage() == null
+						|| !e.getMessage().contains("Database is already closed")) {
+					e.printStackTrace();
+				}
 			} catch (Throwable e) {
 				e.printStackTrace();
 			}
@@ -59,12 +66,12 @@ public abstract class AbstractModelTestCase extends TestCase implements
 		PropertyConfigurator.configure(props);
 
 		// Préfixe de config à utiliser
-		String cfg = props.getProperty("dbconfig");
+		String cfg = getConfigValue(props, null, "dbconfig");
 		// Initialisation de la connexion à la base de données
-		String jdbcDriver = props.getProperty(cfg + "." + "driver");
-		String jdbcUrl = props.getProperty(cfg + "." + "url");
-		String jdbcUser = props.getProperty(cfg + "." + "user");
-		String jdbcPassword = props.getProperty(cfg + "." + "password");
+		String jdbcDriver = getConfigValue(props, cfg, "driver");
+		String jdbcUrl = getConfigValue(props, cfg, "url");
+		String jdbcUser = getConfigValue(props, cfg, "user");
+		String jdbcPassword = getConfigValue(props, cfg, "password");
 
 		// Database connection
 		datasource = new BasicDataSource();
@@ -73,6 +80,22 @@ public abstract class AbstractModelTestCase extends TestCase implements
 		datasource.setUsername(jdbcUser);
 		datasource.setPassword(jdbcPassword);
 		datasource.setDefaultAutoCommit(false);
+	}
+
+	private static String getConfigValue(Properties props, String cfg,
+			String key) {
+		String propertyName = cfg == null ? key : cfg + "." + key;
+		String override = System.getProperty("activitymgr.tests." + propertyName);
+		if (override != null && !"".equals(override.trim())) {
+			return override.trim();
+		}
+		String envPrefix = cfg == null ? key : cfg + "_" + key;
+		String envKey = envPrefix.toUpperCase(Locale.ROOT).replace('.', '_');
+		override = System.getenv(envKey);
+		if (override != null && !"".equals(override.trim())) {
+			return override.trim();
+		}
+		return props.getProperty(propertyName);
 	}
 
 	/** Model manager */

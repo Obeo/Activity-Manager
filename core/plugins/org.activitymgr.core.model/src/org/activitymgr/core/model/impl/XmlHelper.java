@@ -400,15 +400,21 @@ public class XmlHelper implements EntityResolver, ErrorHandler, ContentHandler {
 						"XmlHelper.errors.UNEXPECTED_NODE", qName), locator)); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		} catch (NumberFormatException e) {
-			log.error("Number format error", e); //$NON-NLS-1$
+			if (LOG_ISSUE) {
+				log.error("Number format error", e); //$NON-NLS-1$
+			}
 			error(new SAXParseException(
 					Strings.getString("XmlHelper.errors.NUMBER_FORMAT_ERROR") + e.getMessage(), locator, e)); //$NON-NLS-1$
 		} catch (ModelException e) {
-			log.error("Model violation", e); //$NON-NLS-1$
+			if (LOG_ISSUE) {
+				log.error("Model violation", e); //$NON-NLS-1$
+			}
 			error(new SAXParseException(
 					Strings.getString("XmlHelper.errors.MODEL_VIOLATION") + e.getMessage(), locator, e)); //$NON-NLS-1$
 		} catch (DAOException e) {
-			log.error("Unexpected database access error", e); //$NON-NLS-1$
+			if (LOG_ISSUE) {
+				log.error("Unexpected database access error", e); //$NON-NLS-1$
+			}
 			throw new SAXException(
 					Strings.getString("XmlHelper.errors.DATABASE_ACCESS_ERROR"), e); //$NON-NLS-1$
 		}
