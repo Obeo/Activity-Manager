@@ -51,7 +51,7 @@ jobs:
         
       - name: P2 Deploy Release RCP 🚀🏷️
         if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
-        uses: JamesIves/github-pages-deploy-action@4.1.4
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: ui.rcp/releng/org.activitymgr.ui.rcp.repository/target/repository
@@ -61,7 +61,7 @@ jobs:
         
       - name: P2 Deploy Release Web 🚀🏷️
         if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
-        uses: JamesIves/github-pages-deploy-action@4.1.4
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
           branch: gh-pages
           folder: ui.web/releng/org.activitymgr.ui.web.repository/target/repository
