@@ -301,8 +301,8 @@ public class ModelMgrImpl implements IModelMgr {
 		try {
 			_task = getTask(task.getId());
 			verify("UNKNOWN_TASK", _task != null, task.getId()); //$NON-NLS-1$
-			verify("TASK_PATH_UPDATE_DETECTED", _task.getPath().equals(task.getPath())); //$NON-NLS-1$
-			verify("TASK_NUMBER_UPDATE_DETECTED", _task.getNumber() == task.getNumber()); //$NON-NLS-1$
+			verify("TASK_PATH_UPDATE_DETECTED", _task.getPath().equals(task.getPath()), task.getCode()); //$NON-NLS-1$
+			verify("TASK_NUMBER_UPDATE_DETECTED", _task.getNumber() == task.getNumber(), task.getCode()); //$NON-NLS-1$
 			
 			noErrorOccured = true;
 		} finally {
