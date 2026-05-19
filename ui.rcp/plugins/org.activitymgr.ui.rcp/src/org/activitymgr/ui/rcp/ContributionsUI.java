@@ -1267,7 +1267,7 @@ public class ContributionsUI extends AbstractTableMgrUI implements
 			// Déduction de l'ancien chemin de la tache à partir de l'ancien
 			// chemin complet
 			String oldTaskPath = oldTaskFullpath.substring(0,
-					oldTaskFullpath.length() - 2);
+					oldTaskFullpath.length() - Task.PATH_SGM_SIZE);
 			// Parcours des taches présentes dans le tableau
 			int itemCount = tableViewer.getTable().getItemCount();
 			for (int i = 0; i < itemCount; i++) {

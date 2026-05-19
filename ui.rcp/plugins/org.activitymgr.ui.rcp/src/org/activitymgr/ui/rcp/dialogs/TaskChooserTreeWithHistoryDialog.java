@@ -331,7 +331,7 @@ public class TaskChooserTreeWithHistoryDialog extends AbstractDialog implements
 				// Déduction de l'ancien chemin de la tache à partir de l'ancien
 				// chemin complet
 				String oldTaskPath = oldTaskFullpath.substring(0,
-						oldTaskFullpath.length() - 2);
+						oldTaskFullpath.length() - Task.PATH_SGM_SIZE);
 				for (int i = 0; i < previouslySelectedTasks.size(); i++) {
 					Task currentTask = (Task) previouslySelectedTasks.get(i);
 					// Cas ou la tache modifiée est dans la liste
